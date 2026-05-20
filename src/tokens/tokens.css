@@ -1,0 +1,140 @@
+/**
+ * palestine-ui — Design Tokens
+ * https://github.com/palestine-ui/palestine-ui
+ *
+ * The four flag colors + extended palette for building
+ * Palestine-related digital projects.
+ */
+
+:root {
+  /* ─── Flag Colors ─────────────────────────────────────────── */
+  --pl-black:        #0D0D0D;
+  --pl-white:        #F5F0E8;
+  --pl-green:        #1B5E3B;
+  --pl-red:          #B5202A;
+
+  /* ─── Extended Palette ────────────────────────────────────── */
+  --pl-green-light:  #2E8B5A;
+  --pl-green-dark:   #0F3D25;
+  --pl-green-muted:  #4A7C5E;
+
+  --pl-red-light:    #D32F3A;
+  --pl-red-dark:     #7A1219;
+  --pl-red-muted:    #C25460;
+
+  --pl-sand:         #C9B99A;   /* Palestinian earth / sand */
+  --pl-sand-light:   #E8DFD0;
+  --pl-sand-dark:    #8A7A62;
+
+  --pl-olive:        #6B7C3A;   /* Olive tree leaves */
+  --pl-olive-light:  #9AAB5E;
+  --pl-olive-dark:   #444F22;
+
+  --pl-sky:          #A8C8E8;   /* Gaza sky */
+  --pl-sea:          #2E7DAA;   /* Mediterranean */
+
+  /* ─── Semantic Aliases ────────────────────────────────────── */
+  --pl-primary:      var(--pl-green);
+  --pl-accent:       var(--pl-red);
+  --pl-bg:           var(--pl-white);
+  --pl-text:         var(--pl-black);
+  --pl-muted:        var(--pl-sand);
+
+  /* ─── Typography ──────────────────────────────────────────── */
+  --pl-font-arabic:  'Amiri', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  --pl-font-display: 'Amiri', Georgia, serif;
+  --pl-font-mono:    'DM Mono', 'Fira Code', 'Courier New', monospace;
+  --pl-font-sans:    system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* ─── Spacing ─────────────────────────────────────────────── */
+  --pl-space-1:  4px;
+  --pl-space-2:  8px;
+  --pl-space-3:  12px;
+  --pl-space-4:  16px;
+  --pl-space-5:  24px;
+  --pl-space-6:  32px;
+  --pl-space-7:  48px;
+  --pl-space-8:  64px;
+
+  /* ─── Border Radius ───────────────────────────────────────── */
+  --pl-radius-sm:  4px;
+  --pl-radius-md:  8px;
+  --pl-radius-lg:  12px;
+  --pl-radius-xl:  16px;
+  --pl-radius-full: 9999px;
+
+  /* ─── Shadows ─────────────────────────────────────────────── */
+  --pl-shadow-sm:  0 1px 3px rgba(13, 13, 13, 0.08);
+  --pl-shadow-md:  0 4px 12px rgba(13, 13, 13, 0.12);
+  --pl-shadow-lg:  0 8px 32px rgba(13, 13, 13, 0.16);
+
+  /* ─── Transitions ─────────────────────────────────────────── */
+  --pl-ease:       cubic-bezier(0.4, 0, 0.2, 1);
+  --pl-duration:   200ms;
+}
+
+/* ─── Dark Mode ────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pl-black:    #F5F0E8;
+    --pl-white:    #0D0D0D;
+    --pl-bg:       #111111;
+    --pl-text:     #F5F0E8;
+    --pl-sand:     #5A4F3E;
+    --pl-sand-light: #2A2520;
+  }
+}
+
+/* ─── Utility Classes ──────────────────────────────────────── */
+.pl-text-black   { color: var(--pl-black); }
+.pl-text-white   { color: var(--pl-white); }
+.pl-text-green   { color: var(--pl-green); }
+.pl-text-red     { color: var(--pl-red); }
+.pl-text-olive   { color: var(--pl-olive); }
+.pl-text-sand    { color: var(--pl-sand); }
+
+.pl-bg-black     { background-color: var(--pl-black); }
+.pl-bg-white     { background-color: var(--pl-white); }
+.pl-bg-green     { background-color: var(--pl-green); }
+.pl-bg-red       { background-color: var(--pl-red); }
+.pl-bg-olive     { background-color: var(--pl-olive); }
+.pl-bg-sand      { background-color: var(--pl-sand); }
+
+.pl-border-green { border-color: var(--pl-green); }
+.pl-border-red   { border-color: var(--pl-red); }
+
+/* ─── Flag Stripe ──────────────────────────────────────────── */
+.pl-flag-stripe {
+  display: flex;
+  height: 8px;
+  border-radius: var(--pl-radius-sm);
+  overflow: hidden;
+}
+.pl-flag-stripe::before,
+.pl-flag-stripe::after,
+.pl-flag-stripe > span {
+  flex: 1;
+}
+
+/* ─── Kuffiyeh Background ──────────────────────────────────── */
+.pl-kuffiyeh-bg {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--pl-black) 0px,
+    var(--pl-black) 4px,
+    transparent 4px,
+    transparent 20px
+  ),
+  repeating-linear-gradient(
+    0deg,
+    var(--pl-black) 0px,
+    var(--pl-black) 4px,
+    transparent 4px,
+    transparent 20px
+  );
+}
+
+/* ─── RTL Support ──────────────────────────────────────────── */
+[dir="rtl"] {
+  font-family: var(--pl-font-arabic);
+}
