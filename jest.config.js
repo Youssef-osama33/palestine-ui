@@ -3,24 +3,28 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>/src'],
-  testMatch: ['**/__tests__/**/*.test.ts'],
+  testMatch: ['**/__tests__/**/*.test.{ts,tsx}'],
   transform: {
-    '^.+\\.ts$': ['ts-jest', {
-      tsconfig: {
-        strict: true,
-        esModuleInterop: true,
-        allowSyntheticDefaultImports: true,
-        moduleResolution: 'node',
-        target: 'ES2019',
-        lib: ['ES2019', 'DOM'],
+    '^.+\\.tsx?$': [
+      'ts-jest',
+      {
+        tsconfig: {
+          strict: true,
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+          moduleResolution: 'node',
+          target: 'ES2020',
+          lib: ['ES2020', 'DOM', 'DOM.Iterable'],
+          jsx: 'react-jsx',
+        },
       },
-    }],
+    ],
   },
   moduleNameMapper: {
     '\\.css$': '<rootDir>/src/__mocks__/fileMock.js',
   },
   collectCoverageFrom: [
-    'src/**/*.ts',
+    'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
     '!src/__tests__/**',
     '!src/__mocks__/**',
