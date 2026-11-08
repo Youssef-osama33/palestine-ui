@@ -32,11 +32,12 @@
     "build": "node scripts/build.js",
     "dev": "node scripts/build.js --watch",
     "typecheck": "tsc --noEmit",
+    "verify": "node scripts/verify.js",
     "test": "jest --config jest.config.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "eslint src --ext .ts,.tsx,.js",
-    "prepublishOnly": "npm run typecheck && npm run build && npm test"
+    "prepublishOnly": "npm run typecheck && npm run build && npm run verify && npm test"
   },
   "keywords": [
     "palestine",
