@@ -1,29 +1,56 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>palestine-ui — Demo</title>
+    <title>palestine-ui — Interactive Demo & Playground</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
     <style>
-      /* ── Inline tokens (no bundler needed for demo) ── */
       :root {
         --pl-black: #0d0d0d;
         --pl-white: #f5f0e8;
         --pl-green: #1b5e3b;
-        --pl-green-light: #2e8b5a;
+        --pl-green-light: #288554;
+        --pl-green-dark: #113d26;
         --pl-red: #b5202a;
+        --pl-red-light: #d93843;
+        --pl-red-dark: #82151c;
         --pl-sand: #c9b99a;
+        --pl-sand-light: #e5dec9;
         --pl-olive: #6b7c3a;
+        --pl-olive-light: #8e9e58;
+        --pl-sky: #a8c8e8;
+        --pl-sea: #2e7daa;
+
         --pl-font-arabic: "Amiri", serif;
+        --pl-font-sans: "IBM Plex Sans Arabic", sans-serif;
+        --pl-font-mono: "JetBrains Mono", monospace;
+
         --pl-radius-md: 8px;
         --pl-radius-lg: 12px;
         --pl-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+        /* Light Mode */
+        --bg-body: #f5f0e8;
+        --bg-card: #ffffff;
+        --bg-subtle: #ebe4d8;
+        --text-main: #0d0d0d;
+        --text-muted: #5a554c;
+        --border-clr: rgba(13, 13, 13, 0.12);
+      }
+
+      [data-theme="dark"] {
+        --bg-body: #07090b;
+        --bg-card: #11161a;
+        --bg-subtle: #182026;
+        --text-main: #f5f0e8;
+        --text-muted: #9ba3ab;
+        --border-clr: rgba(245, 240, 232, 0.12);
       }
 
       * {
@@ -33,55 +60,14 @@
       }
 
       body {
-        background: var(--pl-white);
-        color: var(--pl-black);
-        font-family: var(--pl-font-arabic);
+        background: var(--bg-body);
+        color: var(--text-main);
+        font-family: var(--pl-font-sans);
         line-height: 1.7;
-        text-align: center;
+        transition: background 200ms, color 200ms;
       }
 
-      /* ── Hero ── */
-
-      .black {
-        background: #0d0d0d;
-      }
-      .white {
-        background: #f5f0e8;
-      }
-      .green {
-        background: #1b5e3b;
-      }
-      .red {
-        background: #b5202a;
-      }
-      .hero {
-        background: var(--pl-black);
-        color: var(--pl-white);
-        padding: 60px 24px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .hero-kuffiyeh {
-        position: absolute;
-        inset: 0;
-        opacity: 0.08;
-      }
-
-      .hero h1 {
-        font-size: clamp(2rem, 5vw, 3.5rem);
-        font-weight: 700;
-        position: relative;
-      }
-
-      .hero p {
-        font-size: 1.1rem;
-        color: var(--pl-sand);
-        margin-top: 12px;
-        position: relative;
-      }
-
+      /* ── Top Flag Bar & Navbar ── */
       .flag-bar {
         height: 6px;
         display: flex;
@@ -89,101 +75,269 @@
       .flag-bar span {
         flex: 1;
       }
+      .black { background: var(--pl-black); }
+      .white { background: var(--pl-white); }
+      .green { background: var(--pl-green); }
+      .red { background: var(--pl-red); }
 
-      /* ── Layout ── */
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 48px 24px;
+      .navbar {
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border-clr);
+        padding: 12px 24px;
+        position: sticky;
+        top: 0;
+        z-index: 50;
       }
 
-      .section-title {
-        font-size: 1.4rem;
+      .navbar-inner {
+        max-width: 1020px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .brand {
+        font-family: var(--pl-font-mono);
         font-weight: 700;
-        margin-bottom: 20px;
-        padding-bottom: 8px;
-        border-bottom: 2px solid var(--pl-green);
-        display: inline-block;
+        font-size: 1.1rem;
+        color: var(--text-main);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .badge-version {
+        font-size: 11px;
+        background: var(--pl-green);
+        color: #fff;
+        padding: 2px 8px;
+        border-radius: 99px;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .action-btn {
+        background: var(--bg-subtle);
+        color: var(--text-main);
+        border: 1px solid var(--border-clr);
+        padding: 6px 14px;
+        border-radius: var(--pl-radius-md);
+        font-family: var(--pl-font-sans);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 150ms;
+      }
+
+      .action-btn:hover {
+        border-color: var(--pl-green-light);
+      }
+
+      .mono-btn {
+        font-family: var(--pl-font-mono);
+        direction: ltr;
+      }
+
+      /* ── Hero ── */
+      .hero {
+        background: var(--pl-black);
+        color: var(--pl-white);
+        padding: 60px 24px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid var(--border-clr);
+      }
+
+      .hero-kuffiyeh {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.1;
+        pointer-events: none;
+      }
+
+      .hero h1 {
+        font-family: var(--pl-font-arabic);
+        font-size: clamp(2.2rem, 5vw, 3.5rem);
+        font-weight: 700;
+        position: relative;
+      }
+
+      .hero p {
+        font-size: 1.05rem;
+        color: var(--pl-sand);
+        margin-top: 10px;
+        position: relative;
+      }
+
+      /* ── Container & Sections ── */
+      .container {
+        max-width: 1020px;
+        margin: 0 auto;
+        padding: 48px 24px;
       }
 
       section {
         margin-bottom: 56px;
       }
 
-      /* ── Color Grid ── */
+      .section-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--pl-green);
+      }
+
+      .section-title {
+        font-family: var(--pl-font-arabic);
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+
+      .segmented {
+        display: inline-flex;
+        background: var(--bg-subtle);
+        padding: 3px;
+        border-radius: var(--pl-radius-md);
+        border: 1px solid var(--border-clr);
+        gap: 4px;
+      }
+
+      .seg-btn {
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        font-family: var(--pl-font-mono);
+        font-size: 12px;
+        padding: 4px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .seg-btn.active {
+        background: var(--pl-green);
+        color: #ffffff;
+      }
+
+      /* ── Colors Grid ── */
       .color-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+        gap: 14px;
       }
 
       .color-card {
         border-radius: var(--pl-radius-lg);
         overflow: hidden;
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--border-clr);
+        background: var(--bg-card);
+        cursor: pointer;
+        transition: transform 150ms, border-color 150ms;
+      }
+
+      .color-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--pl-green-light);
       }
 
       .color-swatch {
-        height: 70px;
+        height: 72px;
       }
 
       .color-meta {
         padding: 10px 12px;
-        background: white;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
       }
 
       .color-name {
-        font-size: 13px;
+        font-size: 13.5px;
         font-weight: 600;
-        display: block;
+        display: flex;
+        justify-content: space-between;
       }
 
       .color-hex {
-        font-family: monospace;
+        font-family: var(--pl-font-mono);
         font-size: 11px;
-        color: #666;
+        color: var(--text-muted);
+        direction: ltr;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
-      /* ── Icons Grid ── */
-      .icons-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-        gap: 12px;
-      }
-
-      .icon-card {
-        background: white;
-        border: 1px solid rgba(0, 0, 0, 0.08);
+      /* ── Kuffiyeh Studio ── */
+      .studio-box {
+        background: var(--bg-card);
+        border: 1px solid var(--border-clr);
         border-radius: var(--pl-radius-lg);
-        padding: 20px 12px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 200ms var(--pl-ease);
+        padding: 20px;
       }
 
-      .icon-card:hover {
-        border-color: var(--pl-green);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(27, 94, 59, 0.15);
-      }
-
-      .icon-card svg {
-        display: block;
-        margin: 0 auto 8px;
-      }
-
-      .icon-name {
-        font-size: 11px;
-        color: #666;
-        font-family: monospace;
-      }
-
-      /* ── Kuffiyeh Section ── */
       .kuffiyeh-preview {
-        border-radius: var(--pl-radius-lg);
+        border-radius: var(--pl-radius-md);
         overflow: hidden;
         margin-bottom: 16px;
-        border: 1px solid rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--border-clr);
+        background: #0d0d0d;
+      }
+
+      #kuffiyeh-canvas {
+        width: 100%;
+        height: 150px;
+        display: block;
+      }
+
+      .controls-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 16px;
+        padding: 14px;
+        background: var(--bg-subtle);
+        border-radius: var(--pl-radius-md);
+      }
+
+      .ctrl-item label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12.5px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .ctrl-item input[type="range"] {
+        width: 100%;
+        accent-color: var(--pl-green-light);
+        cursor: pointer;
+      }
+
+      .studio-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
       }
 
       .style-buttons {
@@ -193,12 +347,13 @@
       }
 
       .style-btn {
-        font-family: monospace;
+        font-family: var(--pl-font-mono);
         font-size: 12px;
         padding: 6px 14px;
         border-radius: 20px;
-        border: 1px solid #ddd;
-        background: white;
+        border: 1px solid var(--border-clr);
+        background: var(--bg-subtle);
+        color: var(--text-main);
         cursor: pointer;
         transition: all 150ms;
       }
@@ -206,25 +361,119 @@
       .style-btn.active,
       .style-btn:hover {
         background: var(--pl-green);
-        border-color: var(--pl-green);
-        color: white;
+        border-color: var(--pl-green-light);
+        color: #ffffff;
       }
 
-      /* ── Buttons Demo ── */
-      .btn-row {
+      /* ── Icons Section ── */
+      .icons-toolbar {
         display: flex;
-        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
         flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 16px;
+        padding: 12px 16px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-clr);
+        border-radius: var(--pl-radius-md);
+      }
+
+      .color-dots {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .color-dot {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        cursor: pointer;
+      }
+
+      .color-dot.active {
+        border-color: var(--text-main);
+        transform: scale(1.15);
+      }
+
+      .icons-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+        gap: 12px;
+      }
+
+      .icon-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-clr);
+        border-radius: var(--pl-radius-lg);
+        padding: 20px 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 180ms var(--pl-ease);
+      }
+
+      .icon-card:hover {
+        border-color: var(--pl-green-light);
+        transform: translateY(-2px);
+      }
+
+      .icon-card svg {
+        display: block;
+        margin: 0 auto 10px;
+      }
+
+      .icon-ar {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+
+      .icon-name {
+        font-size: 11px;
+        color: var(--text-muted);
+        font-family: var(--pl-font-mono);
+      }
+
+      /* ── UI Components ── */
+      .comp-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+
+      .comp-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-clr);
+        border-radius: var(--pl-radius-lg);
+        padding: 20px;
+      }
+
+      .comp-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 14px;
+      }
+
+      .btn-row,
+      .badge-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
       }
 
       .pl-btn {
-        padding: 10px 22px;
+        padding: 9px 20px;
         border: none;
         border-radius: var(--pl-radius-md);
-        font-family: var(--pl-font-arabic);
-        font-size: 15px;
+        font-family: var(--pl-font-sans);
+        font-weight: 600;
+        font-size: 14px;
         cursor: pointer;
-        transition: all 200ms var(--pl-ease);
+        transition: all 180ms var(--pl-ease);
       }
 
       .pl-btn-green {
@@ -240,20 +489,19 @@
         color: var(--pl-white);
       }
       .pl-btn-red:hover {
-        filter: brightness(1.1);
+        background: var(--pl-red-light);
       }
 
       .pl-btn-outline {
         background: transparent;
-        border: 1.5px solid var(--pl-green);
-        color: var(--pl-green);
+        border: 1.5px solid var(--pl-green-light);
+        color: var(--pl-green-light);
       }
       .pl-btn-outline:hover {
         background: var(--pl-green);
         color: var(--pl-white);
       }
 
-      /* ── Badge ── */
       .badge {
         display: inline-flex;
         align-items: center;
@@ -261,31 +509,38 @@
         padding: 5px 12px;
         border-radius: 20px;
         font-size: 13px;
+        cursor: pointer;
       }
-      .badge-green {
+      .badge-green { background: var(--pl-green); color: white; }
+      .badge-red { background: var(--pl-red); color: white; }
+      .badge-olive { background: var(--pl-olive); color: white; }
+      .badge-sea { background: var(--pl-sea); color: white; }
+
+      /* ── Toast ── */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 24px;
         background: var(--pl-green);
-        color: white;
-      }
-      .badge-red {
-        background: var(--pl-red);
-        color: white;
-      }
-      .badge-olive {
-        background: var(--pl-olive);
-        color: white;
-      }
-
-      .badge-row {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-      .buttons {
-        margin-bottom: 12px;
-        font-weight: 600;
+        color: #ffffff;
+        padding: 10px 18px;
+        border-radius: var(--pl-radius-md);
+        font-family: var(--pl-font-mono);
+        font-size: 12.5px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+        transition: all 200ms var(--pl-ease);
+        z-index: 999;
+        direction: ltr;
       }
 
-      /* ── Footer ── */
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
       footer {
         text-align: center;
         padding: 32px 24px;
@@ -304,7 +559,6 @@
     </style>
   </head>
   <body>
-    <!-- Hero -->
     <div class="flag-bar">
       <span class="black"></span>
       <span class="white"></span>
@@ -312,263 +566,528 @@
       <span class="red"></span>
     </div>
 
+    <nav class="navbar">
+      <div class="navbar-inner">
+        <a href="https://github.com/Youssef-osama33/palestine-ui" class="brand" target="_blank" rel="noopener">
+          <span>🇵🇸 palestine-ui</span>
+          <span class="badge-version">v1.1.0</span>
+        </a>
+        <div class="nav-actions">
+          <button class="action-btn mono-btn" id="copy-install-btn">
+            $ npm i palestine-ui 📋
+          </button>
+          <button class="action-btn" id="theme-toggle-btn">
+            <span id="theme-icon">☀️</span>
+            <span id="theme-text">الوضع الفاتح</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
     <div class="hero">
-    <canvas id="hero-canvas" class="hero-kuffiyeh"></canvas>
-      <h1>palestine ui</h1>
-      <p>Design system for Palestine — colors · icons · kuffiyeh · utilities</p>
+      <canvas id="hero-canvas" class="hero-kuffiyeh"></canvas>
+      <h1>palestine-ui</h1>
+      <p>Design system for Palestine — colors · 12 cultural icons · kuffiyeh generator · Tailwind plugin</p>
     </div>
 
     <div class="container">
-      <!-- Colors -->
+      <!-- 1. Colors (All 14 Palette Tokens) -->
       <section>
-        <div class="section-title">🎨 Color Tokens</div>
+        <div class="section-bar">
+          <div class="section-title">🎨 رموز الألوان (14 لون — اضغط للنسخ)</div>
+          <div class="segmented" id="color-format-group">
+            <button class="seg-btn active" data-fmt="hex">HEX</button>
+            <button class="seg-btn" data-fmt="css">CSS Var</button>
+            <button class="seg-btn" data-fmt="js">JS Token</button>
+            <button class="seg-btn" data-fmt="tw">Tailwind</button>
+          </div>
+        </div>
         <div class="color-grid" id="color-grid"></div>
       </section>
 
-      <!-- Kuffiyeh -->
+      <!-- 2. Kuffiyeh Studio -->
       <section>
-        <div class="section-title">🧣 Kuffiyeh Generator</div>
-        <div class="kuffiyeh-preview">
-          <canvas id="kuffiyeh-canvas" width="860" height="120"></canvas>
+        <div class="section-bar">
+          <div class="section-title">🧣 مولد الكوفية التفاعلي (Kuffiyeh Studio)</div>
         </div>
-        <div class="style-buttons" id="style-buttons"></div>
+        <div class="studio-box">
+          <div class="kuffiyeh-preview">
+            <canvas id="kuffiyeh-canvas" width="960" height="150"></canvas>
+          </div>
+
+          <div class="controls-row">
+            <div class="ctrl-item">
+              <label>
+                <span>حجم الشبكة (Scale)</span>
+                <span id="lbl-scale">16px</span>
+              </label>
+              <input type="range" id="rng-scale" min="8" max="32" step="2" value="16" />
+            </div>
+            <div class="ctrl-item">
+              <label>
+                <span>سُمك الخط (Weight)</span>
+                <span id="lbl-weight">0.30</span>
+              </label>
+              <input type="range" id="rng-weight" min="0.15" max="0.50" step="0.05" value="0.30" />
+            </div>
+            <div class="ctrl-item">
+              <label>
+                <span>الشفافية (Opacity)</span>
+                <span id="lbl-opacity">100%</span>
+              </label>
+              <input type="range" id="rng-opacity" min="0.15" max="1" step="0.05" value="1" />
+            </div>
+          </div>
+
+          <div class="studio-actions">
+            <div class="style-buttons" id="style-buttons"></div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <button class="action-btn" id="btn-copy-kuffiyeh-js">📋 نسخ كود JS</button>
+              <button class="action-btn" id="btn-dl-kuffiyeh">⬇️ تحميل PNG</button>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <!-- Icons -->
+      <!-- 3. Icons (All 12 Cultural Icons) -->
       <section>
-        <div class="section-title">🖼 Icons</div>
+        <div class="section-bar">
+          <div class="section-title">🖼 الأيقونات التراثية (12 أيقونة — اضغط للنسخ)</div>
+          <div class="segmented" id="icon-mode-group">
+            <button class="seg-btn active" data-mode="svg">SVG</button>
+            <button class="seg-btn" data-mode="react">React &lt;Icon/&gt;</button>
+            <button class="seg-btn" data-mode="js">renderIcon()</button>
+          </div>
+        </div>
+
+        <div class="icons-toolbar">
+          <div class="color-dots" id="icon-color-dots"></div>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <span style="font-size: 13px">الحجم:</span>
+            <input type="range" id="rng-icon-size" min="20" max="52" value="32" />
+            <span id="lbl-icon-size" style="font-family: var(--pl-font-mono); font-size: 12px">32px</span>
+          </div>
+        </div>
+
         <div class="icons-grid" id="icons-grid"></div>
       </section>
 
-      <!-- UI Components -->
+      <!-- 4. Components -->
       <section>
-        <div class="section-title">⚡ Components</div>
-
-        <p class="buttons">Buttons</p>
-        <div class="btn-row">
-          <button class="pl-btn pl-btn-green">حرية فلسطين</button>
-          <button class="pl-btn pl-btn-red">العودة</button>
-          <button class="pl-btn pl-btn-outline">المقاومة</button>
+        <div class="section-bar">
+          <div class="section-title">⚡ مكونات الواجهة (اضغط لنسخ HTML)</div>
         </div>
 
-        <p class="buttons">Badges</p>
-        <div class="badge-row">
-          <span class="badge badge-green">🫒 زيتون</span>
-          <span class="badge badge-red">🍉 بطيخة</span>
-          <span class="badge badge-olive">🌾 قمح</span>
+        <div class="comp-grid">
+          <div class="comp-card">
+            <div class="comp-label">الأزرار (Buttons)</div>
+            <div class="btn-row" id="demo-buttons">
+              <button class="pl-btn pl-btn-green">حرية فلسطين</button>
+              <button class="pl-btn pl-btn-red">حق العودة</button>
+              <button class="pl-btn pl-btn-outline">صمود</button>
+            </div>
+          </div>
+
+          <div class="comp-card">
+            <div class="comp-label">الشارات (Badges)</div>
+            <div class="badge-row" id="demo-badges">
+              <span class="badge badge-green">🫒 غصن زيتون</span>
+              <span class="badge badge-red">🍉 بطيخة</span>
+              <span class="badge badge-olive">🌾 قمح البلاد</span>
+              <span class="badge badge-sea">🌊 بحر غزة</span>
+            </div>
+          </div>
         </div>
       </section>
     </div>
 
     <footer>
-      <p>palestine-ui · MIT License</p>
+      <p>palestine-ui v1.1.0 · MIT License</p>
       <p class="footer-links">
-        <a href="https://github.com/Youssef-osama33/palestine-ui">GitHub</a>
+        <a href="https://github.com/Youssef-osama33/palestine-ui" target="_blank" rel="noopener">GitHub Repository</a>
         · Free Palestine 🇵🇸
       </p>
     </footer>
 
-    <script>
-      // ── Inline palestine-ui logic (no bundler for demo) ──────────
+    <div id="toast" class="toast">Copied!</div>
 
+    <script>
+      // ── 1. Complete Palette Data (14 Colors) ──────────────────────
       const COLORS = [
-        { name: "Black", hex: "#0D0D0D", var: "--pl-black" },
-        { name: "White", hex: "#F5F0E8", var: "--pl-white" },
-        { name: "Green", hex: "#1B5E3B", var: "--pl-green" },
-        { name: "Red", hex: "#B5202A", var: "--pl-red" },
-        { name: "Sand", hex: "#C9B99A", var: "--pl-sand" },
-        { name: "Olive", hex: "#6B7C3A", var: "--pl-olive" },
-        { name: "Green Light", hex: "#2E8B5A", var: "--pl-green-light" },
-        { name: "Sky", hex: "#A8C8E8", var: "--pl-sky" },
+        { name: "Black", ar: "أسود العلم", hex: "#0D0D0D", token: "colors.black", cssVar: "--pl-black", tw: "bg-palestine-black" },
+        { name: "White", ar: "أبيض العلم", hex: "#F5F0E8", token: "colors.white", cssVar: "--pl-white", tw: "bg-palestine-white" },
+        { name: "Green", ar: "أخضر العلم", hex: "#1B5E3B", token: "colors.green", cssVar: "--pl-green", tw: "bg-palestine-green" },
+        { name: "Green Light", ar: "أخضر فاتح", hex: "#288554", token: "colors.greenLight", cssVar: "--pl-green-light", tw: "bg-palestine-green-light" },
+        { name: "Green Dark", ar: "أخضر داكن", hex: "#113D26", token: "colors.greenDark", cssVar: "--pl-green-dark", tw: "bg-palestine-green-dark" },
+        { name: "Red", ar: "أحمر العلم", hex: "#B5202A", token: "colors.red", cssVar: "--pl-red", tw: "bg-palestine-red" },
+        { name: "Red Light", ar: "أحمر فاتح", hex: "#D93843", token: "colors.redLight", cssVar: "--pl-red-light", tw: "bg-palestine-red-light" },
+        { name: "Red Dark", ar: "أحمر داكن", hex: "#82151C", token: "colors.redDark", cssVar: "--pl-red-dark", tw: "bg-palestine-red-dark" },
+        { name: "Sand", ar: "تراب فلسطين", hex: "#C9B99A", token: "colors.sand", cssVar: "--pl-sand", tw: "bg-palestine-sand" },
+        { name: "Sand Light", ar: "رملي فاتح", hex: "#E5DEC9", token: "colors.sandLight", cssVar: "--pl-sand-light", tw: "bg-palestine-sand-light" },
+        { name: "Olive", ar: "أوراق الزيتون", hex: "#6B7C3A", token: "colors.olive", cssVar: "--pl-olive", tw: "bg-palestine-olive" },
+        { name: "Olive Light", ar: "زيتوني فاتح", hex: "#8E9E58", token: "colors.oliveLight", cssVar: "--pl-olive-light", tw: "bg-palestine-olive-light" },
+        { name: "Sky", ar: "سماء غزة", hex: "#A8C8E8", token: "colors.sky", cssVar: "--pl-sky", tw: "bg-palestine-sky" },
+        { name: "Sea", ar: "البحر المتوسط", hex: "#2E7DAA", token: "colors.sea", cssVar: "--pl-sea", tw: "bg-palestine-sea" },
       ];
 
+      // ── All 12 Cultural Icons ─────────────────────────────────────
       const ICONS = {
         olive: {
           ar: "غصن زيتون",
-          paths: `
-    <path d="M12 21C12 21 7 16 7 11C7 7.5 9.5 5.5 12 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-    <path d="M12 21C12 21 17 16 17 11C17 7.5 14.5 5.5 12 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
-    <ellipse cx="8.5" cy="9" rx="2.2" ry="1.4" fill="currentColor" transform="rotate(-30 8.5 9)" opacity="0.9"/>
-    <ellipse cx="15.5" cy="9" rx="2.2" ry="1.4" fill="currentColor" transform="rotate(30 15.5 9)" opacity="0.9"/>
-    <ellipse cx="9" cy="13.5" rx="2" ry="1.3" fill="currentColor" transform="rotate(-20 9 13.5)" opacity="0.7"/>
-    <ellipse cx="15" cy="13.5" rx="2" ry="1.3" fill="currentColor" transform="rotate(20 15 13.5)" opacity="0.7"/>`,
+          paths: `<path d="M12 21C12 21 7 16 7 11C7 7.5 9.5 5.5 12 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/><path d="M12 21C12 21 17 16 17 11C17 7.5 14.5 5.5 12 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/><ellipse cx="8.5" cy="9" rx="2.2" ry="1.4" fill="currentColor" transform="rotate(-30 8.5 9)" opacity="0.9"/><ellipse cx="15.5" cy="9" rx="2.2" ry="1.4" fill="currentColor" transform="rotate(30 15.5 9)" opacity="0.9"/><ellipse cx="9" cy="13.5" rx="2" ry="1.3" fill="currentColor" transform="rotate(-20 9 13.5)" opacity="0.7"/><ellipse cx="15" cy="13.5" rx="2" ry="1.3" fill="currentColor" transform="rotate(20 15 13.5)" opacity="0.7"/>`,
         },
         key: {
           ar: "مفتاح العودة",
-          paths: `
-    <circle cx="9" cy="10" r="4.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-    <circle cx="9" cy="10" r="1.8" fill="currentColor"/>
-    <line x1="13.5" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="18.5" y1="10" x2="18.5" y2="13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="21" y1="10" x2="21" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`,
+          paths: `<circle cx="9" cy="10" r="4.5" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><line x1="13.5" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.5" y1="10" x2="18.5" y2="13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="10" x2="21" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`,
         },
         dome: {
           ar: "قبة الصخرة",
-          paths: `
-    <line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-    <line x1="10.8" y1="3" x2="13.2" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-    <path d="M12 4.5C12 4.5 8.5 8 8.5 10.5L15.5 10.5C15.5 8 12 4.5 12 4.5Z" fill="currentColor" opacity="0.8"/>
-    <rect x="7" y="10.5" width="10" height="3.5" rx="0.5" fill="currentColor" opacity="0.7"/>
-    <rect x="5" y="14" width="14" height="5" rx="0.5" fill="currentColor" opacity="0.6"/>`,
+          paths: `<line x1="12" y1="2" x2="12" y2="4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="10.8" y1="3" x2="13.2" y2="3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M12 4.5C12 4.5 8.5 8 8.5 10.5L15.5 10.5C15.5 8 12 4.5 12 4.5Z" fill="currentColor" opacity="0.8"/><rect x="7" y="10.5" width="10" height="3.5" rx="0.5" fill="currentColor" opacity="0.7"/><rect x="5" y="14" width="14" height="5" rx="0.5" fill="currentColor" opacity="0.6"/>`,
         },
         map: {
           ar: "خريطة فلسطين",
-          paths: `
-    <path d="M11.5 3.5C9.5 3.5 7.5 5.5 7.5 7.5C7.5 8.5 8.5 9.5 8.5 10.5C8.5 11.5 7.5 12.5 7.5 13.5C7.5 15.5 8.5 16.5 9.5 17.5C9.5 18.5 9.5 19.5 10.5 20.5C11.5 21.5 12.5 20.5 12.5 19.5C13.5 18.5 14.5 17.5 15.5 16.5C16.5 15.5 16.5 14.5 16.5 13.5C16.5 12.5 15.5 11.5 15.5 10.5C16.5 9.5 17.5 8.5 17.5 7.5C17.5 5.5 15.5 3.5 13.5 3.5Z" fill="currentColor" opacity="0.85"/>
-    <circle cx="12" cy="12" r="1.3" fill="white" opacity="0.9"/>`,
+          paths: `<path d="M11.5 3.5C9.5 3.5 7.5 5.5 7.5 7.5C7.5 8.5 8.5 9.5 8.5 10.5C8.5 11.5 7.5 12.5 7.5 13.5C7.5 15.5 8.5 16.5 9.5 17.5C9.5 18.5 9.5 19.5 10.5 20.5C11.5 21.5 12.5 20.5 12.5 19.5C13.5 18.5 14.5 17.5 15.5 16.5C16.5 15.5 16.5 14.5 16.5 13.5C16.5 12.5 15.5 11.5 15.5 10.5C16.5 9.5 17.5 8.5 17.5 7.5C17.5 5.5 15.5 3.5 13.5 3.5Z" fill="currentColor" opacity="0.85"/><circle cx="12" cy="12" r="1.3" fill="white" opacity="0.9"/>`,
         },
         watermelon: {
           ar: "بطيخة",
-          paths: `
-    <path d="M5 17C5 13 8.5 6.5 12 5.5C15.5 6.5 19 13 19 17Z" fill="currentColor" opacity="0.3"/>
-    <path d="M6.5 17C6.5 13.5 9.5 8 12 7C14.5 8 17.5 13.5 17.5 17Z" fill="currentColor" opacity="0.85"/>
-    <line x1="5" y1="17" x2="19" y2="17" stroke="currentColor" stroke-width="1.2"/>
-    <circle cx="10" cy="13.5" r="0.7" fill="white"/>
-    <circle cx="12" cy="11.5" r="0.7" fill="white"/>
-    <circle cx="14" cy="13.5" r="0.7" fill="white"/>`,
+          paths: `<path d="M5 17C5 13 8.5 6.5 12 5.5C15.5 6.5 19 13 19 17Z" fill="currentColor" opacity="0.3"/><path d="M6.5 17C6.5 13.5 9.5 8 12 7C14.5 8 17.5 13.5 17.5 17Z" fill="currentColor" opacity="0.85"/><line x1="5" y1="17" x2="19" y2="17" stroke="currentColor" stroke-width="1.2"/><circle cx="10" cy="13.5" r="0.7" fill="white"/><circle cx="12" cy="11.5" r="0.7" fill="white"/><circle cx="14" cy="13.5" r="0.7" fill="white"/>`,
         },
         flag: {
           ar: "علم فلسطين",
-          paths: `
-    <line x1="4" y1="3" x2="4" y2="21" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-    <rect x="4" y="5" width="16" height="4.3" fill="currentColor" opacity="0.9"/>
-    <rect x="4" y="9.3" width="16" height="4.3" fill="currentColor" opacity="0.4"/>
-    <rect x="4" y="13.7" width="16" height="4.3" fill="currentColor" opacity="0.7"/>
-    <path d="M4 5L9.5 12L4 19Z" fill="currentColor"/>`,
+          paths: `<line x1="4" y1="3" x2="4" y2="21" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><rect x="4" y="5" width="16" height="4.3" fill="currentColor" opacity="0.9"/><rect x="4" y="9.3" width="16" height="4.3" fill="currentColor" opacity="0.4"/><rect x="4" y="13.7" width="16" height="4.3" fill="currentColor" opacity="0.7"/><path d="M4 5L9.5 12L4 19Z" fill="currentColor"/>`,
         },
         wheat: {
           ar: "قمح",
-          paths: `
-    <line x1="12" y1="21" x2="12" y2="7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-    <ellipse cx="12" cy="7" rx="1.8" ry="2.8" fill="currentColor" opacity="0.9"/>
-    <ellipse cx="9.5" cy="10" rx="1.8" ry="2.2" fill="currentColor" transform="rotate(-35 9.5 10)" opacity="0.85"/>
-    <ellipse cx="14.5" cy="10" rx="1.8" ry="2.2" fill="currentColor" transform="rotate(35 14.5 10)" opacity="0.85"/>`,
+          paths: `<line x1="12" y1="21" x2="12" y2="7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="12" cy="7" rx="1.8" ry="2.8" fill="currentColor" opacity="0.9"/><ellipse cx="9.5" cy="10" rx="1.8" ry="2.2" fill="currentColor" transform="rotate(-35 9.5 10)" opacity="0.85"/><ellipse cx="14.5" cy="10" rx="1.8" ry="2.2" fill="currentColor" transform="rotate(35 14.5 10)" opacity="0.85"/>`,
+        },
+        crescent: {
+          ar: "هلال ونجمة",
+          paths: `<path d="M14.5 4.5A7.5 7.5 0 1 0 14.5 19.5A6 6 0 1 1 14.5 4.5Z" fill="currentColor" opacity="0.85"/><polygon points="16.5,9.5 17.2,11.2 19,11.4 17.6,12.6 18,14.3 16.5,13.4 15,14.3 15.4,12.6 14,11.4 15.8,11.2" fill="currentColor"/>`,
+        },
+        hand: {
+          ar: "يد التضامن",
+          paths: `<path d="M8 13V7.5a1 1 0 0 1 2 0V12m0-5.5a1 1 0 0 1 2 0V12m0-4.5a1 1 0 0 1 2 0V12m0-3a1 1 0 0 1 2 0v5.5a5.5 5.5 0 0 1-11 0V11a1.5 1.5 0 0 1 3 0v2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`,
+        },
+        sun: {
+          ar: "شمس الأمل",
+          paths: `<circle cx="12" cy="12" r="4.5" fill="currentColor" opacity="0.85"/><path d="M12 2v2.5M12 19.5V22M4.93 4.93l1.77 1.77M17.3 17.3l1.77 1.77M2 12h2.5M19.5 12H22M4.93 19.07l1.77-1.77M17.3 6.7l1.77-1.77" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>`,
+        },
+        bird: {
+          ar: "طائر الحرية",
+          paths: `<path d="M3 14c4-1 7-4 9-8 1 4 4 6 9 6-3 2-5 4-6 7-2-2-5-3-12-5Z" fill="currentColor" opacity="0.85"/>`,
         },
         mosque: {
           ar: "مسجد",
-          paths: `
-    <line x1="12" y1="2" x2="12" y2="4.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-    <line x1="10.8" y1="3.2" x2="13.2" y2="3.2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-    <path d="M9 4.5C9 4.5 7 7 7 9.5L17 9.5C17 7 15 4.5 15 4.5C14 6 12 6.5 12 6.5C12 6.5 10 6 9 4.5Z" fill="currentColor" opacity="0.75"/>
-    <rect x="6" y="9.5" width="12" height="3" rx="0.5" fill="currentColor" opacity="0.65"/>
-    <rect x="4" y="12.5" width="16" height="6" rx="0.5" fill="currentColor" opacity="0.55"/>
-    <rect x="10" y="14.5" width="4" height="4" rx="0.5" fill="currentColor"/>`,
+          paths: `<line x1="12" y1="2" x2="12" y2="4.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><line x1="10.8" y1="3.2" x2="13.2" y2="3.2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/><path d="M9 4.5C9 4.5 7 7 7 9.5L17 9.5C17 7 15 4.5 15 4.5C14 6 12 6.5 12 6.5C12 6.5 10 6 9 4.5Z" fill="currentColor" opacity="0.75"/><rect x="6" y="9.5" width="12" height="3" rx="0.5" fill="currentColor" opacity="0.65"/><rect x="4" y="12.5" width="16" height="6" rx="0.5" fill="currentColor" opacity="0.55"/><rect x="10" y="14.5" width="4" height="4" rx="0.5" fill="currentColor"/>`,
         },
       };
 
       const PALETTES = {
-        classic: { c1: "#0D0D0D", c2: "#F5F0E8", c3: "#1B5E3B" },
-        red: { c1: "#B5202A", c2: "#F5F0E8", c3: "#0D0D0D" },
-        olive: { c1: "#6B7C3A", c2: "#C9B99A", c3: "#0D0D0D" },
-        fine: { c1: "#0D0D0D", c2: "#F5F0E8", c3: "#B5202A" },
-        dense: { c1: "#0D0D0D", c2: "#1B5E3B", c3: "#F5F0E8" },
+        classic: { c1: "#0D0D0D", c2: "#F5F0E8", c3: "#1B5E3B", scale: 16 },
+        red: { c1: "#B5202A", c2: "#F5F0E8", c3: "#0D0D0D", scale: 16 },
+        olive: { c1: "#6B7C3A", c2: "#C9B99A", c3: "#0D0D0D", scale: 16 },
+        fine: { c1: "#0D0D0D", c2: "#F5F0E8", c3: "#B5202A", scale: 10 },
+        dense: { c1: "#0D0D0D", c2: "#1B5E3B", c3: "#F5F0E8", scale: 12 },
       };
 
-      // ── Render Colors ─────────────────────────────────────────────
-      const colorGrid = document.getElementById("color-grid");
-      COLORS.forEach(({ name, hex, var: v }) => {
-        const isDark =
-          parseInt(hex.slice(1, 3), 16) * 0.299 +
-            parseInt(hex.slice(3, 5), 16) * 0.587 +
-            parseInt(hex.slice(5, 7), 16) * 0.114 <
-          128;
-        colorGrid.innerHTML += `
-    <div class="color-card">
-      <div class="color-swatch" style="background:${hex}"></div>
-      <div class="color-meta">
-        <span class="color-name">${name}</span>
-        <span class="color-hex">${hex}</span>
-      </div>
-    </div>`;
+      // ── 2. State & Offline-Safe Clipboard ─────────────────────────
+      let activeColorFormat = "hex";
+      let activeKuffiyehStyle = "classic";
+      let activeIconMode = "svg";
+      let activeIconColor = "#288554";
+      let toastTimer = null;
+
+      function showToast(text) {
+        const toast = document.getElementById("toast");
+        toast.textContent = text;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("show"), 2000);
+      }
+
+      function safeCopy(text, label) {
+        const onSuccess = () => {
+          const preview = text.length > 36 ? text.slice(0, 36) + "..." : text;
+          showToast(`✓ Copied (${label}): ${preview}`);
+        };
+
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
+        } else {
+          fallbackCopy(text, onSuccess);
+        }
+      }
+
+      function fallbackCopy(text, callback) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try {
+          document.execCommand("copy");
+          callback();
+        } catch (err) {
+          showToast("Failed to copy");
+        }
+        document.body.removeChild(ta);
+      }
+
+      // ── 3. Navbar & Theme Toggle ──────────────────────────────────
+      document.getElementById("copy-install-btn").addEventListener("click", () => {
+        safeCopy("npm install palestine-ui", "Install Command");
       });
 
-      // ── Render Icons ──────────────────────────────────────────────
-      const iconsGrid = document.getElementById("icons-grid");
-      Object.entries(ICONS).forEach(([name, { ar, paths }]) => {
-        iconsGrid.innerHTML += `
-    <div class="icon-card" title="${ar}">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="#1B5E3B" color="#1B5E3B">
-        ${paths}
-      </svg>
-      <div class="icon-name">${name}</div>
-    </div>`;
+      document.getElementById("theme-toggle-btn").addEventListener("click", () => {
+        const html = document.documentElement;
+        const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        html.setAttribute("data-theme", next);
+        document.getElementById("theme-icon").textContent = next === "dark" ? "☀️" : "🌙";
+        document.getElementById("theme-text").textContent =
+          next === "dark" ? "الوضع الفاتح" : "الوضع الداكن";
       });
 
-      // ── Kuffiyeh Generator ────────────────────────────────────────
-      function drawKuffiyeh(style) {
+      // ── 4. Colors Grid ────────────────────────────────────────────
+      function formatColorValue(c) {
+        if (activeColorFormat === "css") return `var(${c.cssVar})`;
+        if (activeColorFormat === "js") return c.token;
+        if (activeColorFormat === "tw") return c.tw;
+        return c.hex;
+      }
+
+      function renderColors() {
+        const grid = document.getElementById("color-grid");
+        grid.innerHTML = "";
+        COLORS.forEach((c) => {
+          const val = formatColorValue(c);
+          const card = document.createElement("div");
+          card.className = "color-card";
+          card.innerHTML = `
+            <div class="color-swatch" style="background:${c.hex}"></div>
+            <div class="color-meta">
+              <div class="color-name">
+                <span>${c.name}</span>
+                <span style="font-size:11px;color:var(--text-muted)">${c.ar}</span>
+              </div>
+              <span class="color-hex">${val}</span>
+            </div>
+          `;
+          card.addEventListener("click", () => safeCopy(val, c.name));
+          grid.appendChild(card);
+        });
+      }
+
+      document.querySelectorAll("#color-format-group .seg-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll("#color-format-group .seg-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          activeColorFormat = btn.dataset.fmt;
+          renderColors();
+        });
+      });
+
+      // ── 5. Crosshatch Kuffiyeh Generator ──────────────────────────
+      const rngScale = document.getElementById("rng-scale");
+      const rngWeight = document.getElementById("rng-weight");
+      const rngOpacity = document.getElementById("rng-opacity");
+
+      function drawKuffiyeh() {
         const canvas = document.getElementById("kuffiyeh-canvas");
         const ctx = canvas.getContext("2d");
-        const W = canvas.width,
-          H = canvas.height;
-        const { c1, c2, c3 } = PALETTES[style];
-        const s = style === "fine" ? 8 : style === "dense" ? 12 : 16;
+        const W = canvas.width;
+        const H = canvas.height;
+        const { c1, c2, c3 } = PALETTES[activeKuffiyehStyle];
 
+        const s = Number(rngScale.value);
+        const w = Number(rngWeight.value);
+        const alpha = Number(rngOpacity.value);
+
+        document.getElementById("lbl-scale").textContent = `${s}px`;
+        document.getElementById("lbl-weight").textContent = w.toFixed(2);
+        document.getElementById("lbl-opacity").textContent = `${Math.round(alpha * 100)}%`;
+
+        ctx.save();
         ctx.clearRect(0, 0, W, H);
+        ctx.globalAlpha = alpha;
         ctx.fillStyle = c2;
         ctx.fillRect(0, 0, W, H);
 
-        ctx.lineWidth = s * 0.35;
+        // Primary diagonal crosshatch (+45 deg & -45 deg)
+        ctx.lineWidth = s * w;
+        ctx.strokeStyle = c1;
         for (let x = -(H + s); x < W + H; x += s) {
-          ctx.strokeStyle = c1;
           ctx.beginPath();
           ctx.moveTo(x, 0);
           ctx.lineTo(x + H, H);
           ctx.stroke();
-        }
-        ctx.lineWidth = s * 0.25;
-        for (let x = -(H + s); x < W + H; x += s * 2) {
-          ctx.strokeStyle = c3;
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x + H, H);
-          ctx.stroke();
-        }
-        ctx.fillStyle = c2;
-        for (let x = 0; x < W; x += s * 2)
-          for (let y = 0; y < H; y += s * 2)
-            ctx.fillRect(x, y, s * 0.4, s * 0.4);
 
-        document
-          .querySelectorAll(".style-btn")
-          .forEach((b) =>
-            b.classList.toggle("active", b.dataset.style === style),
-          );
+          ctx.beginPath();
+          ctx.moveTo(x + H, 0);
+          ctx.lineTo(x, H);
+          ctx.stroke();
+        }
+
+        // Secondary accent weave
+        ctx.lineWidth = s * (w * 0.65);
+        ctx.strokeStyle = c3;
+        for (let x = -(H + s); x < W + H; x += s * 2) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x + H, H);
+          ctx.stroke();
+        }
+
+        // Traditional geometric intersection knots
+        ctx.fillStyle = c1;
+        const knotSize = s * 0.35;
+        for (let x = 0; x < W; x += s * 2) {
+          for (let y = 0; y < H; y += s * 2) {
+            ctx.fillRect(x - knotSize / 2, y - knotSize / 2, knotSize, knotSize);
+          }
+        }
+        ctx.restore();
+
+        document.querySelectorAll(".style-btn").forEach((b) => {
+          b.classList.toggle("active", b.dataset.style === activeKuffiyehStyle);
+        });
       }
 
-      // ── Style Buttons ─────────────────────────────────────────────
-      const btns = document.getElementById("style-buttons");
+      const styleBtnsWrap = document.getElementById("style-buttons");
       Object.keys(PALETTES).forEach((style) => {
         const btn = document.createElement("button");
         btn.className = "style-btn" + (style === "classic" ? " active" : "");
         btn.dataset.style = style;
         btn.textContent = style;
-        btn.onclick = () => drawKuffiyeh(style);
-        btns.appendChild(btn);
+        btn.addEventListener("click", () => {
+          activeKuffiyehStyle = style;
+          rngScale.value = PALETTES[style].scale;
+          drawKuffiyeh();
+        });
+        styleBtnsWrap.appendChild(btn);
       });
 
-      // ── Hero Kuffiyeh ─────────────────────────────────────────────
+      [rngScale, rngWeight, rngOpacity].forEach((input) => {
+        input.addEventListener("input", drawKuffiyeh);
+      });
+
+      document.getElementById("btn-copy-kuffiyeh-js").addEventListener("click", () => {
+        const code = `new Kuffiyeh({ style: '${activeKuffiyehStyle}', scale: ${rngScale.value}, opacity: ${rngOpacity.value} })`;
+        safeCopy(code, "Kuffiyeh JS");
+      });
+
+      document.getElementById("btn-dl-kuffiyeh").addEventListener("click", () => {
+        const canvas = document.getElementById("kuffiyeh-canvas");
+        const link = document.createElement("a");
+        link.download = `kuffiyeh-${activeKuffiyehStyle}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+
+      // ── 6. Icons Grid (12 Icons + SVG/React/JS Copy) ──────────────
+      const dotColors = ["#288554", "#1B5E3B", "#B5202A", "#C9B99A", "#6B7C3A", "#2E7DAA", "#F5F0E8"];
+      const dotsWrap = document.getElementById("icon-color-dots");
+
+      function renderColorDots() {
+        dotsWrap.innerHTML = "";
+        dotColors.forEach((hex) => {
+          const btn = document.createElement("button");
+          btn.className = "color-dot" + (hex === activeIconColor ? " active" : "");
+          btn.style.background = hex;
+          btn.addEventListener("click", () => {
+            activeIconColor = hex;
+            renderColorDots();
+            renderIcons();
+          });
+          dotsWrap.appendChild(btn);
+        });
+      }
+
+      function renderIcons() {
+        const size = document.getElementById("rng-icon-size").value;
+        document.getElementById("lbl-icon-size").textContent = `${size}px`;
+        const grid = document.getElementById("icons-grid");
+        grid.innerHTML = "";
+
+        Object.entries(ICONS).forEach(([name, { ar, paths }]) => {
+          const svgCode = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="${activeIconColor}" color="${activeIconColor}">${paths}</svg>`;
+          const reactCode = `<Icon name="${name}" size={${size}} color="${activeIconColor}" />`;
+          const jsCode = `renderIcon('${name}', { size: ${size}, color: '${activeIconColor}' })`;
+
+          const card = document.createElement("div");
+          card.className = "icon-card";
+          card.innerHTML = `
+            ${svgCode}
+            <div class="icon-ar">${ar}</div>
+            <div class="icon-name">${name}</div>
+          `;
+          card.addEventListener("click", () => {
+            const out =
+              activeIconMode === "svg"
+                ? svgCode
+                : activeIconMode === "react"
+                  ? reactCode
+                  : jsCode;
+            safeCopy(out, `${name} (${activeIconMode})`);
+          });
+          grid.appendChild(card);
+        });
+      }
+
+      document.getElementById("rng-icon-size").addEventListener("input", renderIcons);
+
+      document.querySelectorAll("#icon-mode-group .seg-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll("#icon-mode-group .seg-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          activeIconMode = btn.dataset.mode;
+        });
+      });
+
+      // ── 7. UI Components Click-to-Copy ────────────────────────────
+      document.querySelectorAll("#demo-buttons button, #demo-badges span").forEach((el) => {
+        el.addEventListener("click", () => {
+          safeCopy(el.outerHTML, "Component HTML");
+        });
+      });
+
+      // ── 8. Hero Background ────────────────────────────────────────
       function drawHero() {
         const c = document.getElementById("hero-canvas");
-        c.width = c.offsetWidth;
-        c.height = c.offsetHeight;
+        c.width = c.offsetWidth || 960;
+        c.height = c.offsetHeight || 220;
         const ctx = c.getContext("2d");
-        const W = c.width,
-          H = c.height,
-          s = 20;
+        const W = c.width;
+        const H = c.height;
+        const s = 20;
         ctx.fillStyle = "#F5F0E8";
         ctx.fillRect(0, 0, W, H);
         ctx.strokeStyle = "#0D0D0D";
-        ctx.lineWidth = 6;
+        ctx.lineWidth = 5;
         for (let x = -(H + s); x < W + H; x += s) {
           ctx.beginPath();
           ctx.moveTo(x, 0);
           ctx.lineTo(x + H, H);
           ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(x + H, 0);
+          ctx.lineTo(x, H);
+          ctx.stroke();
         }
       }
 
+      // ── Initialize ────────────────────────────────────────────────
+      renderColors();
+      renderColorDots();
+      renderIcons();
+      drawKuffiyeh();
       drawHero();
-      drawKuffiyeh("classic");
       window.addEventListener("resize", drawHero);
     </script>
   </body>
