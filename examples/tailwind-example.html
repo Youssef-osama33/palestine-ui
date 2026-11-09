@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>palestine-ui — Tailwind CSS Plugin Example</title>
+    <!-- خطوط عربية وإنجليزية -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Tailwind Play CDN لتشغيل المثال فوراً بدون Build Step -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // محاكاة إعدادات tailwind.js الخاصة بـ palestine-ui
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              palestine: {
+                black: '#0D0D0D',
+                white: '#F5F0E8',
+                green: '#1B5E3B',
+                'green-light': '#288554',
+                'green-dark': '#113D26',
+                red: '#B5202A',
+                'red-light': '#D93843',
+                'red-dark': '#82151C',
+                sand: '#C9B99A',
+                'sand-light': '#E5DEC9',
+                olive: '#6B7C3A',
+                'olive-light': '#8E9E58',
+                sky: '#A8C8E8',
+                sea: '#2E7DAA',
+              },
+            },
+            fontFamily: {
+              'pl-sans': ['"IBM Plex Sans Arabic"', 'sans-serif'],
+              'pl-arabic': ['"Amiri"', 'serif'],
+              'pl-mono': ['"JetBrains Mono"', 'monospace'],
+            },
+            borderRadius: {
+              'pl-sm': '4px',
+              'pl-md': '8px',
+              'pl-lg': '12px',
+              'pl-xl': '16px',
+            },
+          },
+        },
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .pl-kuffiyeh {
+          background-color: #f5f0e8;
+          background-image:
+            repeating-linear-gradient(45deg, rgba(13, 13, 13, 0.08) 0px, rgba(13, 13, 13, 0.08) 4px, transparent 4px, transparent 16px),
+            repeating-linear-gradient(-45deg, rgba(13, 13, 13, 0.08) 0px, rgba(13, 13, 13, 0.08) 4px, transparent 4px, transparent 16px);
+        }
+        .pl-kuffiyeh-dark {
+          background-color: #0d0d0d;
+          background-image:
+            repeating-linear-gradient(45deg, rgba(27, 94, 59, 0.15) 0px, rgba(27, 94, 59, 0.15) 4px, transparent 4px, transparent 16px),
+            repeating-linear-gradient(-45deg, rgba(27, 94, 59, 0.15) 0px, rgba(27, 94, 59, 0.15) 4px, transparent 4px, transparent 16px);
+        }
+        .pl-flag-bg {
+          background: linear-gradient(to left, #0d0d0d 25%, #f5f0e8 25% 50%, #1b5e3b 50% 75%, #b5202a 75%);
+        }
+        .pl-rtl {
+          direction: rtl;
+          text-align: right;
+          font-family: 'Amiri', serif;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-[#07090b] text-palestine-white font-pl-sans min-h-screen">
+    <!-- شريط العلم العلوي باستخدام pl-flag-bg -->
+    <div class="h-2 w-full pl-flag-bg"></div>
+
+    <div class="max-w-4xl mx-auto px-6 py-12">
+      <!-- بطاقة الهيرو باستخدام pl-kuffiyeh-dark -->
+      <header class="pl-kuffiyeh-dark border border-palestine-green/40 rounded-pl-xl p-10 text-center mb-12 shadow-lg">
+        <span class="inline-block bg-palestine-green text-palestine-white font-pl-mono text-xs px-3 py-1 rounded-full mb-4">
+          require('palestine-ui/tailwind')
+        </span>
+        <h1 class="font-pl-arabic text-4xl md:text-5xl font-bold text-palestine-white mb-3">
+          مثال حي لإضافة Tailwind CSS 🇵🇸
+        </h1>
+        <p class="text-palestine-sand max-w-xl mx-auto text-base">
+          كل العناصر في هذه الصفحة مبنية باستخدام كلاسات التوكنز المدمجة في إضافة
+          <code class="font-pl-mono text-palestine-green-light">palestine-ui/tailwind</code>.
+        </p>
+      </header>
+
+      <!-- عرض الكلاسات الجاهزة -->
+      <section class="grid md:grid-cols-2 gap-6 mb-12">
+        <!-- بطاقة الألوان -->
+        <div class="bg-[#11161a] border border-white/10 rounded-pl-lg p-6">
+          <h2 class="font-pl-arabic text-2xl font-bold text-palestine-sand mb-4">
+            1. كلاسات الألوان (Color Utilities)
+          </h2>
+          <div class="space-y-3 font-pl-mono text-xs" dir="ltr">
+            <div class="p-3 rounded-pl-md bg-palestine-green text-palestine-white flex justify-between">
+              <span>.bg-palestine-green</span>
+              <span>#1B5E3B</span>
+            </div>
+            <div class="p-3 rounded-pl-md bg-palestine-red text-palestine-white flex justify-between">
+              <span>.bg-palestine-red</span>
+              <span>#B5202A</span>
+            </div>
+            <div class="p-3 rounded-pl-md bg-palestine-olive text-palestine-white flex justify-between">
+              <span>.bg-palestine-olive</span>
+              <span>#6B7C3A</span>
+            </div>
+            <div class="p-3 rounded-pl-md bg-palestine-sand text-palestine-black font-semibold flex justify-between">
+              <span>.bg-palestine-sand</span>
+              <span>#C9B99A</span>
+            </div>
+            <div class="p-3 rounded-pl-md bg-palestine-sea text-palestine-white flex justify-between">
+              <span>.bg-palestine-sea</span>
+              <span>#2E7DAA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- بطاقة الأنماط والأزرار -->
+        <div class="bg-[#11161a] border border-white/10 rounded-pl-lg p-6 flex flex-col justify-between">
+          <div>
+            <h2 class="font-pl-arabic text-2xl font-bold text-palestine-sand mb-4">
+              2. أنماط الكوفية والأزرار
+            </h2>
+            <div class="pl-kuffiyeh text-palestine-black p-4 rounded-pl-md mb-4 border border-palestine-sand">
+              <p class="font-bold text-sm">خلفية كوفية فاتحة (.pl-kuffiyeh)</p>
+              <p class="text-xs opacity-80 mt-1">تُستخدم للبطاقات والفواصل البصرية البارزة.</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 pt-2">
+            <button class="bg-palestine-green hover:bg-palestine-green-light text-palestine-white px-5 py-2.5 rounded-pl-md font-semibold text-sm transition">
+              زر أساسي
+            </button>
+            <button class="bg-palestine-red hover:bg-palestine-red-light text-palestine-white px-5 py-2.5 rounded-pl-md font-semibold text-sm transition">
+              زر تنبيه
+            </button>
+            <button class="border border-palestine-sand text-palestine-sand hover:bg-palestine-sand hover:text-palestine-black px-5 py-2.5 rounded-pl-md font-semibold text-sm transition">
+              زر خارجي
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
