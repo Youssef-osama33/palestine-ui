@@ -2,18 +2,17 @@
  * palestine-ui — SVG Icon Definitions
  *
  * Each icon is a pure SVG path/shapes string.
- * Rendered at 24x24 viewBox.
+ * Standardized on a 24x24 viewBox.
  */
 
 export interface IconDef {
-  name: string;
-  nameAr: string;
-  viewBox: string;
-  paths: string;
+  readonly name: string;
+  readonly nameAr: string;
+  readonly viewBox: '0 0 24 24';
+  readonly paths: string;
 }
 
-export const ICONS: Record<string, IconDef> = {
-
+const ICON_DEFINITIONS = {
   olive: {
     name: 'Olive Branch',
     nameAr: 'غصن زيتون',
@@ -174,9 +173,10 @@ export const ICONS: Record<string, IconDef> = {
       <rect x="19" y="12.5" width="2" height="6" rx="1" fill="currentColor" opacity="0.5"/>
     `,
   },
+} as const satisfies Record<string, IconDef>;
 
-} as const;
+export type IconName = keyof typeof ICON_DEFINITIONS;
 
-export type IconName = keyof typeof ICONS;
+export const ICONS: Record<IconName, IconDef> = ICON_DEFINITIONS;
 
-export const iconNames = Object.keys(ICONS) as IconName[];
+export const iconNames = Object.keys(ICON_DEFINITIONS) as IconName[];
