@@ -1,13 +1,13 @@
 /**
- * palestine-ui — Design Tokens
- * https://github.com/palestine-ui/palestine-ui
+ * palestine-ui — Design Tokens (CSS Custom Properties)
+ * https://github.com/Youssef-osama33/palestine-ui
  *
- * The four flag colors + extended palette for building
+ * The four flag colors + extended cultural palette for building
  * Palestine-related digital projects.
  */
 
 :root {
-  /* ─── Flag Colors ─────────────────────────────────────────── */
+  /* ─── Flag Colors (Immutable Primitives) ──────────────────── */
   --pl-black:        #0D0D0D;
   --pl-white:        #F5F0E8;
   --pl-green:        #1B5E3B;
@@ -31,14 +31,16 @@
   --pl-olive-dark:   #444F22;
 
   --pl-sky:          #A8C8E8;   /* Gaza sky */
-  --pl-sea:          #2E7DAA;   /* Mediterranean */
+  --pl-sea:          #2E7DAA;   /* Mediterranean Sea */
 
-  /* ─── Semantic Aliases ────────────────────────────────────── */
+  /* ─── Semantic Theme Aliases (Light Default) ──────────────── */
   --pl-primary:      var(--pl-green);
   --pl-accent:       var(--pl-red);
   --pl-bg:           var(--pl-white);
+  --pl-surface:      #FFFFFF;
   --pl-text:         var(--pl-black);
-  --pl-muted:        var(--pl-sand);
+  --pl-muted:        var(--pl-sand-dark);
+  --pl-border:       rgba(13, 13, 13, 0.12);
 
   /* ─── Typography ──────────────────────────────────────────── */
   --pl-font-arabic:  'Amiri', 'Noto Naskh Arabic', 'Traditional Arabic', serif;
@@ -57,10 +59,10 @@
   --pl-space-8:  64px;
 
   /* ─── Border Radius ───────────────────────────────────────── */
-  --pl-radius-sm:  4px;
-  --pl-radius-md:  8px;
-  --pl-radius-lg:  12px;
-  --pl-radius-xl:  16px;
+  --pl-radius-sm:   4px;
+  --pl-radius-md:   8px;
+  --pl-radius-lg:   12px;
+  --pl-radius-xl:   16px;
   --pl-radius-full: 9999px;
 
   /* ─── Shadows ─────────────────────────────────────────────── */
@@ -73,16 +75,29 @@
   --pl-duration:   200ms;
 }
 
-/* ─── Dark Mode ────────────────────────────────────────────── */
+/* ─── Automatic Dark Mode (OS Preference) ──────────────────── */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --pl-black:    #F5F0E8;
-    --pl-white:    #0D0D0D;
-    --pl-bg:       #111111;
+  :root:not([data-theme="light"]) {
+    --pl-primary:  var(--pl-green-light);
+    --pl-accent:   var(--pl-red-light);
+    --pl-bg:       #07090B;
+    --pl-surface:  #11161A;
     --pl-text:     #F5F0E8;
-    --pl-sand:     #5A4F3E;
-    --pl-sand-light: #2A2520;
+    --pl-muted:    #C9B99A;
+    --pl-border:   rgba(245, 240, 232, 0.12);
   }
+}
+
+/* ─── Explicit Dark Mode ([data-theme="dark"] or .dark) ────── */
+[data-theme="dark"],
+.dark {
+  --pl-primary:  var(--pl-green-light);
+  --pl-accent:   var(--pl-red-light);
+  --pl-bg:       #07090B;
+  --pl-surface:  #11161A;
+  --pl-text:     #F5F0E8;
+  --pl-muted:    #C9B99A;
+  --pl-border:   rgba(245, 240, 232, 0.12);
 }
 
 /* ─── Utility Classes ──────────────────────────────────────── */
@@ -92,6 +107,8 @@
 .pl-text-red     { color: var(--pl-red); }
 .pl-text-olive   { color: var(--pl-olive); }
 .pl-text-sand    { color: var(--pl-sand); }
+.pl-text-sky     { color: var(--pl-sky); }
+.pl-text-sea     { color: var(--pl-sea); }
 
 .pl-bg-black     { background-color: var(--pl-black); }
 .pl-bg-white     { background-color: var(--pl-white); }
@@ -99,42 +116,51 @@
 .pl-bg-red       { background-color: var(--pl-red); }
 .pl-bg-olive     { background-color: var(--pl-olive); }
 .pl-bg-sand      { background-color: var(--pl-sand); }
+.pl-bg-sky       { background-color: var(--pl-sky); }
+.pl-bg-sea       { background-color: var(--pl-sea); }
 
 .pl-border-green { border-color: var(--pl-green); }
 .pl-border-red   { border-color: var(--pl-red); }
+.pl-border-sand  { border-color: var(--pl-sand); }
 
-/* ─── Flag Stripe ──────────────────────────────────────────── */
-.pl-flag-stripe {
-  display: flex;
+/* ─── Flag Stripe & Background ─────────────────────────────── */
+.pl-flag-stripe,
+.pl-flag-bg {
   height: 8px;
   border-radius: var(--pl-radius-sm);
-  overflow: hidden;
-}
-.pl-flag-stripe::before,
-.pl-flag-stripe::after,
-.pl-flag-stripe > span {
-  flex: 1;
-}
-
-/* ─── Kuffiyeh Background ──────────────────────────────────── */
-.pl-kuffiyeh-bg {
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--pl-black) 0px,
-    var(--pl-black) 4px,
-    transparent 4px,
-    transparent 20px
-  ),
-  repeating-linear-gradient(
-    0deg,
-    var(--pl-black) 0px,
-    var(--pl-black) 4px,
-    transparent 4px,
-    transparent 20px
+  background: linear-gradient(
+    to right,
+    var(--pl-black) 0% 25%,
+    var(--pl-white) 25% 50%,
+    var(--pl-green) 50% 75%,
+    var(--pl-red) 75% 100%
   );
 }
 
+/* ─── Kuffiyeh Background Pattern ──────────────────────────── */
+.pl-kuffiyeh,
+.pl-kuffiyeh-bg {
+  background-color: var(--pl-white);
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      var(--pl-black) 0px,
+      var(--pl-black) 4px,
+      transparent 4px,
+      transparent 16px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      var(--pl-black) 0px,
+      var(--pl-black) 4px,
+      transparent 4px,
+      transparent 16px
+    );
+}
+
 /* ─── RTL Support ──────────────────────────────────────────── */
-[dir="rtl"] {
+[dir="rtl"],
+.pl-rtl {
+  direction: rtl;
   font-family: var(--pl-font-arabic);
 }
