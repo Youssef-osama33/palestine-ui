@@ -1,5 +1,6 @@
 /**
  * palestine-ui — Color & Design Tokens (TypeScript)
+ * https://github.com/Youssef-osama33/palestine-ui
  */
 
 export const colors = {
@@ -19,23 +20,23 @@ export const colors = {
   redDark:     '#7A1219',
   redMuted:    '#C25460',
 
-  // Earth Tones
+  // Earth Tones (Palestinian Land)
   sand:        '#C9B99A',
   sandLight:   '#E8DFD0',
   sandDark:    '#8A7A62',
 
-  // Olive
+  // Olive Tones
   olive:       '#6B7C3A',
   oliveLight:  '#9AAB5E',
   oliveDark:   '#444F22',
 
-  // Environment
+  // Environment (Gaza Sky & Mediterranean Sea)
   sky:         '#A8C8E8',
   sea:         '#2E7DAA',
 } as const;
 
 export type PaletteColor = keyof typeof colors;
-export type ColorHex = typeof colors[PaletteColor];
+export type ColorHex = (typeof colors)[PaletteColor];
 
 export const fonts = {
   arabic:  "'Amiri', 'Noto Naskh Arabic', 'Traditional Arabic', serif",
@@ -43,6 +44,8 @@ export const fonts = {
   mono:    "'DM Mono', 'Fira Code', 'Courier New', monospace",
   sans:    "system-ui, -apple-system, 'Segoe UI', sans-serif",
 } as const;
+
+export type FontKey = keyof typeof fonts;
 
 export const spacing = {
   1: '4px',
@@ -55,6 +58,8 @@ export const spacing = {
   8: '64px',
 } as const;
 
+export type SpacingKey = keyof typeof spacing;
+
 export const radius = {
   sm:   '4px',
   md:   '8px',
@@ -63,13 +68,23 @@ export const radius = {
   full: '9999px',
 } as const;
 
+export type RadiusKey = keyof typeof radius;
+
 export const shadows = {
   sm: '0 1px 3px rgba(13, 13, 13, 0.08)',
   md: '0 4px 12px rgba(13, 13, 13, 0.12)',
   lg: '0 8px 32px rgba(13, 13, 13, 0.16)',
 } as const;
 
-/** All tokens in one object for easy spread */
-export const tokens = { colors, fonts, spacing, radius, shadows } as const;
+export type ShadowKey = keyof typeof shadows;
+
+/** All tokens bundled in one immutable object */
+export const tokens = {
+  colors,
+  fonts,
+  spacing,
+  radius,
+  shadows,
+} as const;
 
 export default tokens;
