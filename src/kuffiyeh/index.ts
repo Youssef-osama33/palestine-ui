@@ -2,37 +2,37 @@
  * palestine-ui — Kuffiyeh Pattern Generator
  *
  * Generates the traditional Palestinian kuffiyeh (كوفية) geometric pattern
- * algorithmically. Outputs SVG string, CSS background, or draws to Canvas.
+ * algorithmically. Outputs SVG string, Data URI, CSS background, or draws to Canvas.
  */
 
 export type KuffiyehStyle = 'classic' | 'red' | 'olive' | 'fine' | 'dense';
 
 export interface KuffiyehOptions {
-  /** Visual style preset */
+  /** Visual style preset (default: 'classic') */
   style?: KuffiyehStyle;
-  /** Grid cell size in pixels (default: 16) */
+  /** Grid cell size in pixels (default: 16, min: 4) */
   scale?: number;
   /** Primary color override (overrides style) */
   color1?: string;
-  /** Secondary color override (overrides style) */
+  /** Secondary background color override (overrides style) */
   color2?: string;
   /** Accent color override (overrides style) */
   color3?: string;
-  /** Width in pixels for SVG/CSS output (default: 400) */
+  /** Width in pixels for SVG output (default: 400) */
   width?: number;
-  /** Height in pixels for SVG/CSS output (default: 400) */
+  /** Height in pixels for SVG output (default: 400) */
   height?: number;
-  /** Pattern opacity 0-1 (default: 1) */
+  /** Pattern opacity 0–1 (default: 1) */
   opacity?: number;
 }
 
-interface Palette {
+export interface KuffiyehPalette {
   c1: string;
   c2: string;
   c3: string;
 }
 
-const PALETTES: Record<KuffiyehStyle, Palette> = {
+const PALETTES: Record<KuffiyehStyle, KuffiyehPalette> = {
   classic: { c1: '#0D0D0D', c2: '#F5F0E8', c3: '#1B5E3B' },
   red:     { c1: '#B5202A', c2: '#F5F0E8', c3: '#0D0D0D' },
   olive:   { c1: '#6B7C3A', c2: '#C9B99A', c3: '#0D0D0D' },
@@ -40,23 +40,28 @@ const PALETTES: Record<KuffiyehStyle, Palette> = {
   dense:   { c1: '#0D0D0D', c2: '#1B5E3B', c3: '#F5F0E8' },
 };
 
+let instanceCounter = 0;
+
 export class Kuffiyeh {
   private opts: Required<KuffiyehOptions>;
-  private palette: Palette;
+  private palette: KuffiyehPalette;
 
   constructor(options: KuffiyehOptions = {}) {
+    const rawScale = options.scale ?? 16;
+    const rawOpacity = options.opacity ?? 1;
+
     this.opts = {
-      style:   options.style   ?? 'classic',
-      scale:   options.scale   ?? 16,
-      color1:  options.color1  ?? '',
-      color2:  options.color2  ?? '',
-      color3:  options.color3  ?? '',
-      width:   options.width   ?? 400,
-      height:  options.height  ?? 400,
-      opacity: options.opacity ?? 1,
+      style:   options.style  ?? 'classic',
+      scale:   Math.max(4, rawScale),
+      color1:  options.color1 ?? '',
+      color2:  options.color2 ?? '',
+      color3:  options.color3 ?? '',
+      width:   Math.max(1, options.width ?? 400),
+      height:  Math.max(1, options.height ?? 400),
+      opacity: Math.min(1, Math.max(0, rawOpacity)),
     };
 
-    const base = PALETTES[this.opts.style];
+    const base = PALETTES[this.opts.style] ?? PALETTES.classic;
     this.palette = {
       c1: this.opts.color1 || base.c1,
       c2: this.opts.color2 || base.c2,
@@ -69,32 +74,33 @@ export class Kuffiyeh {
     const { width, height, opacity } = this.opts;
     const s = this.opts.scale;
     const { c1, c2, c3 } = this.palette;
-    const id = `kf-${Math.random().toString(36).slice(2, 7)}`;
+    const id = `kf-${++instanceCounter}`;
 
-    const lines: string[] = [];
+    const elements: string[] = [];
+    const primaryStroke = +(s * 0.35).toFixed(2);
+    const accentStroke = +(s * 0.25).toFixed(2);
+    const knotSize = +(s * 0.4).toFixed(2);
 
-    // Diagonal lines (primary)
+    // 1. Primary diagonal crosshatch (+45 deg & -45 deg)
     for (let x = -height; x < width + height; x += s) {
-      lines.push(
-        `<line x1="${x}" y1="0" x2="${x + height}" y2="${height}"
-          stroke="${c1}" stroke-width="${s * 0.35}" />`
+      elements.push(
+        `<line x1="${x}" y1="0" x2="${x + height}" y2="${height}" stroke="${c1}" stroke-width="${primaryStroke}" />`,
+        `<line x1="${x + height}" y1="0" x2="${x}" y2="${height}" stroke="${c1}" stroke-width="${primaryStroke}" />`
       );
     }
 
-    // Diagonal lines (accent — every 2nd)
+    // 2. Accent diagonal lines (every 2nd step)
     for (let x = -height; x < width + height; x += s * 2) {
-      lines.push(
-        `<line x1="${x}" y1="0" x2="${x + height}" y2="${height}"
-          stroke="${c3}" stroke-width="${s * 0.25}" />`
+      elements.push(
+        `<line x1="${x}" y1="0" x2="${x + height}" y2="${height}" stroke="${c3}" stroke-width="${accentStroke}" />`
       );
     }
 
-    // Cross-hatch dots
+    // 3. Geometric cross-hatch intersection knots
     for (let x = 0; x < width; x += s * 2) {
       for (let y = 0; y < height; y += s * 2) {
-        lines.push(
-          `<rect x="${x}" y="${y}" width="${s * 0.4}" height="${s * 0.4}"
-            fill="${c2}" />`
+        elements.push(
+          `<rect x="${x}" y="${y}" width="${knotSize}" height="${knotSize}" fill="${c2}" />`
         );
       }
     }
@@ -112,38 +118,36 @@ export class Kuffiyeh {
   </defs>
   <rect width="${width}" height="${height}" fill="${c2}" />
   <g clip-path="url(#${id}-clip)">
-    ${lines.join('\n    ')}
+    ${elements.join('\n    ')}
   </g>
 </svg>`;
+  }
+
+  /** Returns an SVG Data URI string suitable for `<img src>` or CSS `url(...)` */
+  toDataUri(): string {
+    const svg = this.toSVG().replace(/\s+/g, ' ').trim();
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
   }
 
   /** Returns a CSS background property string */
   toCss(): string {
     const s = this.opts.scale;
+    const { opacity } = this.opts;
     const { c1, c2, c3 } = this.palette;
 
-    return [
+    const rules = [
       `background-color: ${c2}`,
-      `background-image:
-        repeating-linear-gradient(
-          45deg,
-          ${c1} 0px, ${c1} ${s * 0.35}px,
-          transparent ${s * 0.35}px, transparent ${s}px
-        ),
-        repeating-linear-gradient(
-          45deg,
-          ${c3} 0px, ${c3} ${s * 0.25}px,
-          transparent ${s * 0.25}px, transparent ${s * 2}px
-        ),
-        repeating-linear-gradient(
-          -45deg,
-          ${c1} 0px, ${c1} ${s * 0.35}px,
-          transparent ${s * 0.35}px, transparent ${s}px
-        )`,
-    ].join(';\n');
+      `background-image: repeating-linear-gradient(45deg, ${c1} 0px, ${c1} ${s * 0.35}px, transparent ${s * 0.35}px, transparent ${s}px), repeating-linear-gradient(45deg, ${c3} 0px, ${c3} ${s * 0.25}px, transparent ${s * 0.25}px, transparent ${s * 2}px), repeating-linear-gradient(-45deg, ${c1} 0px, ${c1} ${s * 0.35}px, transparent ${s * 0.35}px, transparent ${s}px)`,
+    ];
+
+    if (opacity < 1) {
+      rules.push(`opacity: ${opacity}`);
+    }
+
+    return rules.join(';\n');
   }
 
-  /** Draws the pattern onto a provided Canvas element */
+  /** Draws the pattern onto a provided HTMLCanvasElement */
   toCanvas(canvas: HTMLCanvasElement): void {
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Could not get 2D context from canvas');
@@ -151,15 +155,21 @@ export class Kuffiyeh {
     const W = canvas.width;
     const H = canvas.height;
     const s = this.opts.scale;
+    const { opacity } = this.opts;
     const { c1, c2, c3 } = this.palette;
 
+    if (typeof ctx.save === 'function') ctx.save();
     ctx.clearRect(0, 0, W, H);
 
-    // Background
+    if (opacity < 1) {
+      ctx.globalAlpha = opacity;
+    }
+
+    // 1. Background
     ctx.fillStyle = c2;
     ctx.fillRect(0, 0, W, H);
 
-    // Diagonal lines — primary
+    // 2. Primary diagonal crosshatch (+45 deg & -45 deg)
     ctx.strokeStyle = c1;
     ctx.lineWidth = s * 0.35;
     for (let x = -(H + s); x < W + H; x += s) {
@@ -167,9 +177,14 @@ export class Kuffiyeh {
       ctx.moveTo(x, 0);
       ctx.lineTo(x + H, H);
       ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x + H, 0);
+      ctx.lineTo(x, H);
+      ctx.stroke();
     }
 
-    // Diagonal lines — accent
+    // 3. Accent diagonal lines
     ctx.strokeStyle = c3;
     ctx.lineWidth = s * 0.25;
     for (let x = -(H + s); x < W + H; x += s * 2) {
@@ -179,27 +194,30 @@ export class Kuffiyeh {
       ctx.stroke();
     }
 
-    // Cross-hatch dots
+    // 4. Cross-hatch intersection knots
     ctx.fillStyle = c2;
+    const knotSize = s * 0.4;
     for (let x = 0; x < W; x += s * 2) {
       for (let y = 0; y < H; y += s * 2) {
-        ctx.fillRect(x, y, s * 0.4, s * 0.4);
+        ctx.fillRect(x, y, knotSize, knotSize);
       }
     }
+
+    if (typeof ctx.restore === 'function') ctx.restore();
   }
 
-  /** Returns the active color palette */
-  getPalette(): Readonly<Palette> {
+  /** Returns a copy of the active color palette */
+  getPalette(): Readonly<KuffiyehPalette> {
     return { ...this.palette };
   }
 
-  /** Returns all available style presets */
+  /** Returns all available style preset names */
   static getStyles(): KuffiyehStyle[] {
     return Object.keys(PALETTES) as KuffiyehStyle[];
   }
 }
 
-/** Shorthand factory */
+/** Shorthand factory function for creating a Kuffiyeh instance */
 export function createKuffiyeh(options?: KuffiyehOptions): Kuffiyeh {
   return new Kuffiyeh(options);
 }
