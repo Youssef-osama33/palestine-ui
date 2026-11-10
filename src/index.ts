@@ -6,7 +6,7 @@
  * for developers building Palestine-related projects.
  *
  * @license MIT
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 // ─── Tokens ─────────────────────────────────────────────────
@@ -18,25 +18,55 @@ export {
   shadows,
   tokens,
 } from './tokens';
-export type { PaletteColor, ColorHex } from './tokens';
+export type {
+  PaletteColor,
+  ColorHex,
+  FontKey,
+  SpacingKey,
+  RadiusKey,
+  ShadowKey,
+} from './tokens';
 
 // ─── Icons ──────────────────────────────────────────────────
 export {
   ICONS,
   iconNames,
   renderIcon,
+  iconToDataUri,
   mountIcon,
   createIconElement,
   Icon,
+  OliveIcon,
+  KeyIcon,
+  DomeIcon,
+  MapIcon,
+  WatermelonIcon,
+  FlagIcon,
+  WheatIcon,
+  CrescentIcon,
+  HandIcon,
+  SunIcon,
+  BirdIcon,
+  MosqueIcon,
 } from './icons';
-export type { IconName, IconOptions, ReactIconProps } from './icons';
+export type {
+  IconName,
+  IconDef,
+  IconOptions,
+  ReactIconProps,
+  NamedIconProps,
+} from './icons';
 
 // ─── Kuffiyeh Generator ─────────────────────────────────────
 export {
   Kuffiyeh,
   createKuffiyeh,
 } from './kuffiyeh';
-export type { KuffiyehStyle, KuffiyehOptions } from './kuffiyeh';
+export type {
+  KuffiyehStyle,
+  KuffiyehOptions,
+  KuffiyehPalette,
+} from './kuffiyeh';
 
 // ─── Utilities ───────────────────────────────────────────────
 export {
@@ -50,6 +80,7 @@ export {
   arabicText,
   animId,
 } from './utils';
+export type { RgbColor } from './utils';
 
 // ─── Version ─────────────────────────────────────────────────
-export const VERSION = '1.0.0';
+export const VERSION = '1.1.0';
