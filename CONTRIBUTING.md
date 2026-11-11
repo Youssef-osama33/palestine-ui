@@ -25,6 +25,7 @@ myIcon: {
    - Use `fill="currentColor"` for filled shapes and `stroke="currentColor"` for stroked shapes so color can be overridden via CSS.
    - Prefer explicit `opacity` values only when needed for layering.
    - Ensure the icon is culturally accurate and respectful.
+   - Export the icon via `iconToDataUri()` by adding it to `src/icons/index.ts` if not already present.
 
 ### Adding a Kuffiyeh Style
 
@@ -36,6 +37,22 @@ myStyle: { c1: '#0D0D0D', c2: '#F5F0E8', c3: '#B5202A' },
 ```
 
 3. Update the `KuffiyehStyle` union type to include your new style and run the type checks.
+
+### Bumping the Version
+
+If your change affects the public API, update `VERSION` in `src/index.ts` and `package.json`:
+
+```ts
+// src/index.ts
+export const VERSION = '1.2.0';
+```
+
+```json
+// package.json
+{ "version": "1.2.0" }
+```
+
+---
 
 ### Adding a Token
 
@@ -65,6 +82,13 @@ npm run build
 ```
 
 All tests, lint rules, and TypeScript checks must pass before submitting a PR.
+
+## Peer Dependencies
+
+The package declares optional peer dependencies for `react`, `react-dom`, and `tailwindcss`.
+When adding a new integration, declare it as an optional peer dependency in `package.json` — never as a hard dependency.
+
+---
 
 ## Code Style
 
