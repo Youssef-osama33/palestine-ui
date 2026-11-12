@@ -6,11 +6,10 @@ import * as PalestineUI from '../index';
 
 describe('Main Entry Point (src/index.ts)', () => {
   test('exports current package VERSION', () => {
-    expect(PalestineUI.VERSION).toBeDefined();
-    expect(typeof PalestineUI.VERSION).toBe('string');
+    expect(PalestineUI.VERSION).toBe('1.1.0');
   });
 
-  test('re-exports Tokens module', () => {
+  test('re-exports all Tokens module members', () => {
     expect(PalestineUI.colors).toBeDefined();
     expect(PalestineUI.fonts).toBeDefined();
     expect(PalestineUI.spacing).toBeDefined();
@@ -19,11 +18,28 @@ describe('Main Entry Point (src/index.ts)', () => {
     expect(PalestineUI.tokens).toBeDefined();
   });
 
-  test('re-exports Icons module', () => {
+  test('re-exports all Icons module functions and React components', () => {
     expect(PalestineUI.ICONS).toBeDefined();
     expect(PalestineUI.iconNames).toBeDefined();
     expect(PalestineUI.renderIcon).toBeDefined();
+    expect(PalestineUI.iconToDataUri).toBeDefined();
     expect(PalestineUI.mountIcon).toBeDefined();
+    expect(PalestineUI.createIconElement).toBeDefined();
+    expect(PalestineUI.Icon).toBeDefined();
+
+    // Named React Icon exports
+    expect(PalestineUI.OliveIcon).toBeDefined();
+    expect(PalestineUI.KeyIcon).toBeDefined();
+    expect(PalestineUI.DomeIcon).toBeDefined();
+    expect(PalestineUI.MapIcon).toBeDefined();
+    expect(PalestineUI.WatermelonIcon).toBeDefined();
+    expect(PalestineUI.FlagIcon).toBeDefined();
+    expect(PalestineUI.WheatIcon).toBeDefined();
+    expect(PalestineUI.CrescentIcon).toBeDefined();
+    expect(PalestineUI.HandIcon).toBeDefined();
+    expect(PalestineUI.SunIcon).toBeDefined();
+    expect(PalestineUI.BirdIcon).toBeDefined();
+    expect(PalestineUI.MosqueIcon).toBeDefined();
   });
 
   test('re-exports Kuffiyeh module', () => {
@@ -31,7 +47,7 @@ describe('Main Entry Point (src/index.ts)', () => {
     expect(PalestineUI.createKuffiyeh).toBeDefined();
   });
 
-  test('re-exports Utils module', () => {
+  test('re-exports all Utils module helpers', () => {
     expect(PalestineUI.cssVar).toBeDefined();
     expect(PalestineUI.hex).toBeDefined();
     expect(PalestineUI.hexToRgb).toBeDefined();
