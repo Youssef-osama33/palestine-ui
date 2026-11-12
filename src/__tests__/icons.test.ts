@@ -5,7 +5,26 @@
 import React from 'react';
 import * as IconsModule from '../icons';
 
-const { ICONS, iconNames, renderIcon, mountIcon } = IconsModule;
+const {
+  ICONS,
+  iconNames,
+  renderIcon,
+  iconToDataUri,
+  mountIcon,
+  Icon,
+  OliveIcon,
+  KeyIcon,
+  DomeIcon,
+  MapIcon,
+  WatermelonIcon,
+  FlagIcon,
+  WheatIcon,
+  CrescentIcon,
+  HandIcon,
+  SunIcon,
+  BirdIcon,
+  MosqueIcon,
+} = IconsModule;
 
 describe('Icons Module', () => {
   test('exports all 12 expected cultural icon names', () => {
@@ -52,33 +71,41 @@ describe('Icons Module', () => {
     expect(svg).toContain(ICONS['olive']!.nameAr);
   });
 
-  test('renderIcon respects size option', () => {
-    const svg = renderIcon('key', { size: 48 });
-    expect(svg).toContain('width="48"');
-    expect(svg).toContain('height="48"');
-  });
+  test('renderIcon respects size, width, height, color, label, className, style, and strokeWidth', () => {
+    const sized = renderIcon('key', {
+      size: 48,
+      strokeWidth: 2.5,
+      style: { display: 'inline-block' },
+    });
+    expect(sized).toContain('width="48"');
+    expect(sized).toContain('height="48"');
+    expect(sized).toContain('stroke-width="2.5"');
+    expect(sized).toContain('style="display:inline-block"');
 
-  test('renderIcon respects independent width and height options', () => {
-    const svg = renderIcon('flag', { width: 32, height: 16 });
-    expect(svg).toContain('width="32"');
-    expect(svg).toContain('height="16"');
-  });
+    const rect = renderIcon('flag', { width: 32, height: 16 });
+    expect(rect).toContain('width="32"');
+    expect(rect).toContain('height="16"');
 
-  test('renderIcon respects color, custom label, and className', () => {
-    const svg = renderIcon('dome', {
+    const custom = renderIcon('dome', {
       color: '#1B5E3B',
       label: 'Peace symbol',
       className: 'my-icon',
     });
-    expect(svg).toContain('fill="#1B5E3B"');
-    expect(svg).toContain('Peace symbol');
-    expect(svg).toContain('class="my-icon"');
+    expect(custom).toContain('fill="#1B5E3B"');
+    expect(custom).toContain('Peace symbol');
+    expect(custom).toContain('class="my-icon"');
   });
 
   test('renderIcon throws descriptive error for unknown icon', () => {
     expect(() => renderIcon('nonexistent' as any)).toThrow(
       'palestine-ui: icon "nonexistent" not found'
     );
+  });
+
+  test('iconToDataUri returns valid encoded SVG data URI', () => {
+    const uri = iconToDataUri('watermelon', { color: '#B5202A', size: 32 });
+    expect(uri.startsWith('data:image/svg+xml;utf8,')).toBe(true);
+    expect(decodeURIComponent(uri)).toContain('<svg');
   });
 
   test('mountIcon injects SVG into target DOM element', () => {
@@ -88,11 +115,27 @@ describe('Icons Module', () => {
     expect(el.innerHTML).toContain('width="20"');
   });
 
-  test('React Icon component renders valid React element if exported', () => {
-    const MaybeIcon = (IconsModule as Record<string, unknown>)['Icon'];
-    if (typeof MaybeIcon === 'function') {
-      const el = MaybeIcon({ name: 'olive', size: 28, color: '#1B5E3B' });
-      expect(React.isValidElement(el)).toBe(true);
+  test('React Icon and all 12 NamedIcon components render valid React elements', () => {
+    expect(React.isValidElement(Icon({ name: 'olive', size: 28, color: '#1B5E3B' }))).toBe(true);
+    expect(Icon({ name: 'invalid' as any })).toBeNull();
+
+    const namedComponents = [
+      OliveIcon,
+      KeyIcon,
+      DomeIcon,
+      MapIcon,
+      WatermelonIcon,
+      FlagIcon,
+      WheatIcon,
+      CrescentIcon,
+      HandIcon,
+      SunIcon,
+      BirdIcon,
+      MosqueIcon,
+    ];
+
+    for (const Comp of namedComponents) {
+      expect(React.isValidElement(Comp({ size: 24 }))).toBe(true);
     }
   });
 });
