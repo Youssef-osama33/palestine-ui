@@ -1,8 +1,8 @@
 /**
  * palestine-ui — Icon Renderer
  *
- * Vanilla JS renderer + optional React component wrapper.
- * Works in any JS environment; React export is tree-shakeable.
+ * Vanilla JS renderer + Data URI helper + React components.
+ * Works in any JS environment; React exports are tree-shakeable.
  */
 
 import { ICONS, type IconName, type IconDef, iconNames } from './definitions';
@@ -37,9 +37,6 @@ function applyStrokeWidth(paths: string, strokeWidth?: number): string {
 
 /**
  * Returns an SVG string for any named icon.
- *
- * @example
- * document.body.innerHTML = renderIcon('olive', { size: 32, color: '#1B5E3B' });
  */
 export function renderIcon(name: IconName, options: IconOptions = {}): string {
   const icon = ICONS[name];
@@ -74,11 +71,17 @@ export function renderIcon(name: IconName, options: IconOptions = {}): string {
 }
 
 /**
+ * Returns a CSS-ready SVG Data URI for use in `<img src>` or CSS `url(...)`.
+ */
+export function iconToDataUri(name: IconName, options: IconOptions = {}): string {
+  const svg = renderIcon(name, options)
+    .replace(/\s+/g, ' ')
+    .trim();
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
+/**
  * Mounts an icon into a DOM element.
- *
- * @example
- * const el = document.getElementById('my-icon');
- * mountIcon(el, 'key', { size: 28 });
  */
 export function mountIcon(
   element: HTMLElement,
@@ -102,10 +105,12 @@ export function createIconElement(
   return svg;
 }
 
-// ─── React Export (Tree-shakeable & Bundler-compatible) ────────────────────
+// ─── React Exports (Tree-shakeable & Bundler-compatible) ───────────────────
 export interface ReactIconProps extends IconOptions {
   name: IconName;
 }
+
+export type NamedIconProps = Omit<ReactIconProps, 'name'>;
 
 function resolveReact(): typeof import('react') | null {
   if (typeof globalThis !== 'undefined' && (globalThis as any).React) {
@@ -121,11 +126,6 @@ function resolveReact(): typeof import('react') | null {
 
 /**
  * React component for rendering Palestine UI icons.
- * Automatically resolves React in modern bundlers (Vite/Next/Webpack) or global scope.
- *
- * @example
- * import { Icon } from 'palestine-ui/icons';
- * <Icon name="olive" size={24} color="#1B5E3B" />
  */
 export function Icon({
   name,
@@ -166,5 +166,25 @@ export function Icon({
     dangerouslySetInnerHTML: { __html: innerPaths },
   });
 }
+
+function createNamedIcon(iconName: IconName) {
+  const NamedIcon = (props: NamedIconProps) => Icon({ ...props, name: iconName });
+  NamedIcon.displayName = `PalestineUI(${iconName})`;
+  return NamedIcon;
+}
+
+// Named React Icon Components for direct import
+export const OliveIcon = createNamedIcon('olive');
+export const KeyIcon = createNamedIcon('key');
+export const DomeIcon = createNamedIcon('dome');
+export const MapIcon = createNamedIcon('map');
+export const WatermelonIcon = createNamedIcon('watermelon');
+export const FlagIcon = createNamedIcon('flag');
+export const WheatIcon = createNamedIcon('wheat');
+export const CrescentIcon = createNamedIcon('crescent');
+export const HandIcon = createNamedIcon('hand');
+export const SunIcon = createNamedIcon('sun');
+export const BirdIcon = createNamedIcon('bird');
+export const MosqueIcon = createNamedIcon('mosque');
 
 export default renderIcon;
