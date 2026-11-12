@@ -35,39 +35,43 @@ describe('Kuffiyeh Module', () => {
     expect(k).toBeInstanceOf(Kuffiyeh);
   });
 
-  test('toSVG returns valid accessible SVG string', () => {
-    const k = new Kuffiyeh({ style: 'classic' });
+  test('toSVG returns valid accessible SVG string with custom dimensions and opacity', () => {
+    const k = new Kuffiyeh({ style: 'classic', width: 300, height: 150, opacity: 0.5 });
     const svg = k.toSVG();
     expect(svg).toContain('<svg');
     expect(svg).toContain('</svg>');
     expect(svg).toContain('xmlns=');
     expect(svg).toContain('aria-label');
     expect(svg).toContain('role="img"');
-  });
-
-  test('toSVG respects width, height, and opacity options', () => {
-    const k = new Kuffiyeh({ width: 300, height: 150, opacity: 0.5 });
-    const svg = k.toSVG();
     expect(svg).toContain('width="300"');
     expect(svg).toContain('height="150"');
     expect(svg).toContain('opacity="0.5"');
   });
 
-  test('toCss returns valid CSS background properties', () => {
+  test('toDataUri returns valid SVG data URI', () => {
     const k = new Kuffiyeh({ style: 'red' });
+    const uri = k.toDataUri();
+    expect(uri.startsWith('data:image/svg+xml;utf8,')).toBe(true);
+    expect(decodeURIComponent(uri)).toContain('<svg');
+  });
+
+  test('toCss returns valid CSS background properties and handles opacity', () => {
+    const k = new Kuffiyeh({ style: 'red', opacity: 0.4 });
     const css = k.toCss();
     expect(css).toContain('background-color');
     expect(css).toContain('background-image');
     expect(css).toContain('repeating-linear-gradient');
+    expect(css).toContain('opacity: 0.4');
   });
 
-  test('toCanvas draws pattern onto 2D canvas context', () => {
-    const k = new Kuffiyeh({ style: 'olive' });
+  test('toCanvas draws pattern onto 2D canvas context with opacity', () => {
+    const k = new Kuffiyeh({ style: 'olive', opacity: 0.7 });
     k.toCanvas(mockCanvas);
     expect(mockCtx.clearRect).toHaveBeenCalledWith(0, 0, 200, 100);
     expect(mockCtx.fillRect).toHaveBeenCalled();
     expect(mockCtx.beginPath).toHaveBeenCalled();
     expect(mockCtx.stroke).toHaveBeenCalled();
+    expect(mockCtx.globalAlpha).toBe(0.7);
   });
 
   test('toCanvas throws error when 2D context is unavailable', () => {
@@ -76,7 +80,7 @@ describe('Kuffiyeh Module', () => {
     expect(() => k.toCanvas(badCanvas)).toThrow('Could not get 2D context');
   });
 
-  test('getPalette returns accurate colors for presets (classic, red, olive)', () => {
+  test('getPalette returns accurate colors for presets and custom overrides', () => {
     const classic = new Kuffiyeh({ style: 'classic' });
     expect(classic.getPalette()).toEqual({
       c1: '#0D0D0D',
@@ -90,12 +94,10 @@ describe('Kuffiyeh Module', () => {
     const olive = new Kuffiyeh({ style: 'olive' });
     expect(olive.getPalette().c1).toBe('#6B7C3A');
     expect(olive.getPalette().c2).toBe('#C9B99A');
-  });
 
-  test('custom colors override preset palette', () => {
-    const k = new Kuffiyeh({ color1: '#AABBCC', color2: '#DDEEFF' });
-    expect(k.getPalette().c1).toBe('#AABBCC');
-    expect(k.getPalette().c2).toBe('#DDEEFF');
+    const custom = new Kuffiyeh({ color1: '#AABBCC', color2: '#DDEEFF' });
+    expect(custom.getPalette().c1).toBe('#AABBCC');
+    expect(custom.getPalette().c2).toBe('#DDEEFF');
   });
 
   test('getStyles returns all available style presets', () => {
